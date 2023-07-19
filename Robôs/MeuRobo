@@ -1,0 +1,117 @@
+//IO.PrintLine(cor("lc1") && cor("rc1");  ver a cor que o sensor está vendo
+String cor(string sensor){
+	return Bot.GetComponent<ColorSensor>(sensor).Analog.ToString();
+}
+
+void motor(string nome,int forca, int velocidade){
+	
+	// ativar o motor  
+	Bot.GetComponent<Servomotor>(nome).Locked = false;
+	Bot.GetComponent<Servomotor>(nome).Apply(forca,velocidade);
+}
+
+async Task Main()
+{
+	IO.OpenConsole();
+
+	while(true) {   
+
+	// condição pro robô andar com o sensor cc na linha preta 
+		if (cor("lc1")=="Branco" && cor("rc1")=="Branco" && cor("lc2")=="Branco" && cor("rc2")=="Branco" && cor("cc")=="Preto") { 
+			motor("blmotor", 500, 500);
+			motor("brmotor", 500, 500);
+			motor("flmotor", 500, 500);
+			motor("frmotor", 500, 500);
+
+			// motor parar quando for fazer curva para direito        
+			
+if (cor("lc1")=="Branco" && cor("rc1")=="Preto" && cor("lc2")=="Branco" || cor("rc2")=="Preto" && cor("cc")=="Branco") {
+				// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+				motor("blmotor", 500, 250);
+				motor("brmotor", 500, -250);
+				motor("flmotor", 500, 250);
+				motor("frmotor", 500, -250);
+			}  
+
+
+		}  
+
+		// condição pro robô andar com o sensor rc1 na linha preta 
+		else if (cor("lc1")=="Branco" && cor("rc1")=="Preto" && cor("lc2")=="Branco" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, 250);
+			motor("brmotor", 500, -250);
+			motor("flmotor", 500, 250);
+			motor("frmotor", 500, -250);
+		}  
+
+
+		// condição pro robô andar com o sensor rc2 na linha preta 
+		else if (cor("lc1")=="Branco" && cor("rc1")=="Branco" && cor("lc2")=="Branco" && cor("rc2")=="Preto" && cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, 250);
+			motor("brmotor", 500, -250);
+			motor("flmotor", 500, 250);
+			motor("frmotor", 500, -250);
+		}  
+
+
+		// condição pro robô andar com o sensor lc1 na linha preta 
+		else if (cor("lc1")=="Preto" && cor("rc1")=="Branco" && cor("lc2")=="Branco" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, -250);
+			motor("brmotor", 500, 350);
+			motor("flmotor", 500, -250);
+			motor("frmotor", 500, 350);
+		}  
+
+
+		// condição pro robô andar com o sensor lc2 na linha preta 
+		else if (cor("lc1")=="Branco" && cor("rc1")=="Branco" && cor("lc2")=="Preto" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, -150);
+			motor("brmotor", 500, 350);
+			motor("flmotor", 500, -150);
+			motor("frmotor", 500, 350);
+		}  
+
+		//condição pro robô passar pelos quebra molas 
+		else if (cor("lc1")=="Branco" && cor("rc1")=="Branco" && cor("lc2")=="Branco" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, 150);
+			motor("brmotor", 500, 150);
+			motor("flmotor", 500, 150);
+			motor("frmotor", 500, 150);
+
+			//caso o robo fique travado com o rc1 no preto no quebra molas ele continue a andar 
+			if (cor("lc1")=="Branco" && cor("rc1")=="Preto" && cor("lc2")=="Branco" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+				motor("blmotor", 500, 150);
+				motor("brmotor", 500, 150);
+				motor("flmotor", 500, 150);
+				motor("frmotor", 500, 150);
+			}
+
+			//caso o robo fique travado com o lc2 no preto no quebra molas ele continue a andar 
+			else if (cor("lc1")=="Branco" && cor("rc1")=="Branco" && cor("lc2")=="Preto" && cor("rc2")=="Branco" && cor("cc")=="Branco") {
+				motor("blmotor", 500, 150);
+				motor("brmotor", 500, 150);
+				motor("flmotor", 500, 150);
+				motor("frmotor", 500, 150);
+			}
+		}  
+		
+		
+		//condição pro robô parar na curva de 90 graus
+		else if (cor("lc1")=="Branco" && cor("rc1")=="Preto" && cor("lc2")=="Branco" && cor("rc2")=="Preto" && cor("cc")=="Preto" || cor("cc")=="Branco") {
+			// IO.PrintLine(cor("lc1")+""+cor("lc2")+""+cor("cc")+""+cor("rc1")+""+cor("rc2"));
+			motor("blmotor", 500, 250);
+			motor("brmotor", 500, -250);
+			motor("flmotor", 500, 250);
+			motor("frmotor", 500, -250);	
+		}  
+
+		
+		await Time.Delay(50);
+		
+	}
+}
